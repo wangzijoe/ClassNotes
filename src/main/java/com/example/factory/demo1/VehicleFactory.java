@@ -6,7 +6,7 @@ package com.example.factory.demo1;
  * 无需关心Vehicle创建的过程，这样做可以减少耦合，符合以来倒置原则：
  * 但是，当增加一个新的Vehicle类时，需要对VehicleFactory进行修改，
  * 这样就打破了开闭原则。
- *
+ * <p>
  * 我们可以修改这种简单工厂模式，使得新注册的Vehicle类，在使用的时候
  * 才被实例化，从而保证其对扩展开放，对修改关闭
  * 具体实现方式有两种：
@@ -23,7 +23,7 @@ public class VehicleFactory {
         if (type.equals(VehicleType.Bike)) return new Bike();
         if (type.equals(VehicleType.Car)) return new Car();
         if (type.equals(VehicleType.Truck)) return new Truck();
-        else return null;
+        return null;
     }
 
 }
