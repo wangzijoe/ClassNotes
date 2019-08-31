@@ -1,2 +1,2 @@
 # ClassNotes
-建立这个文档，记录学习笔记
+Create this project to record class notes.
