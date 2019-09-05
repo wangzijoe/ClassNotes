@@ -131,6 +131,24 @@ git mv 旧的文件名 新的文件名
 ![删除文件](image/删除文件.png)
 
 ## 7、创建和切换分支
+![Git分支](image/Git分支.png)
+```text
+// 创建分支
+git branch 分支名
+
+// 让log显示指向这个提交的所有引用
+git log --decorate
+
+// 切换分支
+git checkout 分支名
+
+// --oneline显示精简版本
+git log --decorate --oneline
+
+// --graph 以图形化显示 --all显示所有的分支
+git log --decorate --oneline --graph --all
+```
+![oneline](image/oneline.png)
 ## 8、合并和删除分支
 ![实际开发中的分支](image/实际开发中的分支.png)
 ```text
