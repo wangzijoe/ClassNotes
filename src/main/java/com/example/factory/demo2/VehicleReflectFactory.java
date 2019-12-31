@@ -9,8 +9,10 @@ import java.util.Map;
  */
 public class VehicleReflectFactory {
 
+  @SuppressWarnings("rawtypes")
     private Map<String, Class> map = new HashMap<>();
 
+  @SuppressWarnings("rawtypes")
     protected void registerVehicle(String vehicleId, Class vehicleClass) {
         map.put(vehicleId, vehicleClass);
     }
@@ -21,6 +23,7 @@ public class VehicleReflectFactory {
      * 2、反射机制会降低程序的运行效率，高性能场景下避免使用该机制
      * 此时我们可以使用 注册产品对象，并向每一个产品添加newInstance();方法，该方法返回自身类型相同的新实例
      */
+  @SuppressWarnings("rawtypes")
     protected Vehicle createVehicle(String vehicleId) throws IllegalAccessException, InstantiationException {
         Class clazz = this.map.get(vehicleId);
         return (Vehicle) clazz.newInstance();
