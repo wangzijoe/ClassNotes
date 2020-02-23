@@ -6,14 +6,18 @@ exports.showIndex = function(req, res) {
 	// "albums":file.getAllAlbumns()
 	// });
 
-	//nodejs的所有東西都是異步的，内層函數不是return回來就行，
-	//而是調用外層函數提供的回調函數，把數據當作回調函數的參數來使用
-	file.getAllDirectorys(function(albums) {
+	// nodejs的所有東西都是異步的，内層函數不是return回來就行，
+	// 而是調用外層函數提供的回調函數，把數據當作回調函數的參數來使用
+	file.getAllDirectorys(function(err, dirs) {
+		if (err) {
+			res.send(err);
+			return;
+		}
 		res.render("index", {
-			"albums" : albums
+			"dirs" : dirs
 		});
 	});
-	
+
 }
 
 // 顯示相冊

@@ -2,19 +2,19 @@ var fs = require("fs");
 
 exports.getAllDirectorys = function(callback) {
 	fs.readdir("./uploads", function(err, files) {
-		if (err) {
-			throw err;
-		}
 		var allDirs = [];
+		if (err) {
+			callback("服務異常！！！", allDirs);
+		}
 		// 迭代器
 		(function iterator(i) {
 			if (i == files.length) {
-				callback(allDirs);
+				callback(null, allDirs);
 				return;
 			}
-			fs.stat("./uploads", function(err, stats) {
+			fs.stat("./uploads/" + files[i], function(err, stats) {
 				if (err) {
-					throw err;
+					callback("找不到 " + files[i], null);
 				}
 				if (stats.isDirectory()) {
 					allDirs.push(files[i]);
