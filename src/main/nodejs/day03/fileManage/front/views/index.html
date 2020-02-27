@@ -68,45 +68,132 @@
 				<!-- /.navbar-collapse -->
 			</div>
 		</nav>
-		<ol class="breadcrumb">
-			<li>
-				<a href="#">Home</a>
-			</li>
-			<li>
-				<a href="#">Library</a>
-			</li>
-			<li class="active">Data</li>
+		<!-- 路径导航 -->
+		<ol class="breadcrumb" id="breadcrumbArea">
 		</ol>
 	</div>
 
+	<!-- 文件夹和文件展示区域 -->
 	<div class="container">
-		<div class="list-group">
-			<a href="#" class="list-group-item active">
-				<input type="checkbox" class="idCheck" />
-				<span class="folderName">Cras justo odio</span>
-				<span class="badge">14</span>
-			</a>
-			<a href="#" class="list-group-item">
-				<input type="checkbox" class="idCheck" />
-				<span class="folderName">Morbi leo risus</span>
-				<span class="badge">4</span>
-			</a>
-			<a href="#" class="list-group-item">
-				<input type="checkbox" class="idCheck" />
-				<span class="fileName"> Dapibus ac facilisis in</span>
-			</a>
-			<a href="#" class="list-group-item">
-				<input type="checkbox" class="idCheck" />
-				<span class="fileName">Porta ac consectetur ac</span>
-			</a>
-			<a href="#" class="list-group-item">
-				<input type="checkbox" class="idCheck" />
-				<span class="fileName">Vestibulum at eros</span>
-			</a>
-		</div>
+		<div class="list-group" id="fileAndFolderArea"></div>
 	</div>
+	<script type="text/x-handlebars-template" id="breadcrumbTemplate">
+		{{#each breadcrumb}}
+			{{#if isLast}}
+				<li class="active">{{name}}</li>
+			{{else}}
+				<li>
+					<a href="#">{{name}}</a>
+				</li>
+			{{/if}}
+		{{/each}}
+	</script>
+	<script type="text/x-handlebars-template" id="fileAndFolderAreaTemplate">
+		{{#each pathInfo}}
+			{{#if isFolder}}
+				<a href="#" class="list-group-item">
+					<input type="checkbox" class="idCheck" />
+					<span class="folderName">{{name}}</span>
+					<span class="badge">></span>
+				</a>
+			{{else}}
+				<a href="#" class="list-group-item">
+					<input type="checkbox" class="idCheck" />
+					<span class="fileName">{{name}}</span>
+				</a>
+			{{/if}}
+		{{/each}}
+	</script>
+	<script type="text/x-handlebars-template" id="fileNameTemplate">
+
+	</script>
+
 
 	<script src="bootstrap/js/jQuery.js"></script>
 	<script src="bootstrap/js/bootstrap.js"></script>
+	<script src="https://cdn.bootcss.com/handlebars.js/4.7.3/handlebars.js"></script>
+
+	<script>
+		var app = new App();
+		var baseUrl = "http://127.0.0.1:88";
+		//初始化导航栏
+		var breadcrumbPathArr = [ "/" ];
+		app.initBreadcrumb(breadcrumbPathArr);
+		//构造文件和文件夹区域
+		$.get(baseUrl, function(data) {
+			app.initFileAndFolderArea(data);
+		});
+
+
+		function App() {
+			/**
+			 *[ "/" , "home" , "data"]
+			 * 接收路径数组，返回面包屑导航HTML，除最后一个以外可点击
+			 */
+			this.initBreadcrumb = function(breadcrumbPathArr) {
+				var data = {};
+				var breadcrumb = [];
+
+				for (var i = 0; i < breadcrumbPathArr.length; i++) {
+					var breadcrumbJson = {}
+					if (i == breadcrumbPathArr.length) {
+						breadcrumbJson.isLast = true;
+					} else {
+						breadcrumbJson.isLast = false;
+					}
+					breadcrumbJson.name = breadcrumbPathArr[i];
+					breadcrumb.push(breadcrumbJson);
+					data.breadcrumb = breadcrumb;
+				}
+
+				var template = Handlebars.compile($("#breadcrumbTemplate")
+						.html());
+				var html = template(data);
+				$("#breadcrumbArea").html(html);
+			}
+
+			/**
+			 *var fileAndDirNames = {
+			 *	"status" : 200,
+			 *	"msg" : {
+			 *		"allDirNames" : [ "cookie", "debug", "destroy" ],
+			 *		"allFileNames" : [ "wenjianjia.jpg" ]
+			 *	}
+			 *};
+			 * 接收文件和文件夹名称的json数据，返回文件和文件夹区域的html
+			 */
+			this.initFileAndFolderArea = function(fileAndDirNames) {
+				if (fileAndDirNames.status == 200) {
+					fileAndDirNames = fileAndDirNames.msg;
+					var data = {};
+					var pathInfo = [];
+					var folderNames = fileAndDirNames.allDirNames;
+					for (var i = 0; i < folderNames.length; i++) {
+						var pathInfoJson = {};
+						pathInfoJson.name = folderNames[i];
+						pathInfoJson.isFolder = true;
+						pathInfo.push(pathInfoJson);
+					}
+					var fileNames = fileAndDirNames.allFileNames;
+					for (var i = 0; i < fileNames.length; i++) {
+						var pathInfoJson = {};
+						pathInfoJson.name = fileNames[i];
+						pathInfoJson.isFolder = false;
+						pathInfo.push(pathInfoJson);
+						data.pathInfo = pathInfo;
+					}
+
+					var template = Handlebars.compile($(
+							"#fileAndFolderAreaTemplate").html());
+					var html = template(data);
+					$("#fileAndFolderArea").html(html);
+					$("a").click(function(e) {
+						$("a").removeClass("active");
+						$(e.target).addClass("active");
+					});
+				}
+			}
+		}
+	</script>
 </body>
 </html>
