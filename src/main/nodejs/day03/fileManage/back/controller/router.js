@@ -14,3 +14,18 @@ exports.getFileAndDirNames = function(req, res) {
 		res.send(msg.ok(pathInfo));
 	});
 }
+
+/**
+ * 创建文件夹，接收请求体 { basePath: '/basePath', newFolderName: 'newFolderName' }
+ */
+exports.createDir = function(req, res) {
+	var basePath = req.body.basePath;
+	var newFolderName = req.body.newFolderName;
+	file.mkdir(basePath, newFolderName, function(err, info){
+		if(err){
+			res.send(msg.error(500, err));
+			return;
+		}
+		res.send(msg.ok(info));
+	});
+}

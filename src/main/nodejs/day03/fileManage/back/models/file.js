@@ -48,3 +48,14 @@ var createPathInfo = function(allDirNames, allFileNames) {
 	};
 	return pathInfo;
 }
+
+exports.mkdir = function(basePath, newFolderName, callback) {
+	var path = "./uploads/" + basePath + "/" + newFolderName;
+	fs.mkdir(path, function(err) {
+		if (err) {
+			callback(err, null);
+			return;
+		}
+		callback(null, "创建成功");
+	});
+}
