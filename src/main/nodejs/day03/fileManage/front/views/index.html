@@ -166,12 +166,13 @@
 		//点击面包屑导航
 		function openPath(dom) {
 			breadcrumbPathArr = [];
-			$("#breadcrumbArea a").each(function() {
-				// 遍历当前节点，如果该节点在点击的节点之前，则放入面包屑导航的数组
-				if ($(this).index() <= $(dom).index()) {
-					breadcrumbPathArr.push($(this).text());
-				}
+			breadcrumbPathArr.push($(dom).text());
+			// 当前a标签的父标签li，遍历当前点击节点之前的所有a标签
+			$(dom).parent().prevAll().each(function() {
+				breadcrumbPathArr.push($(this).find("a").text());
 			});
+			// prevAll()方法，返回的是倒序的，需要颠倒回来
+			breadcrumbPathArr = breadcrumbPathArr.reverse();
 			initPage(baseUrl + breadcrumbPathArr.join("/"));
 		}
 

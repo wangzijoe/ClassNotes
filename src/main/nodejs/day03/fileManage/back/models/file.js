@@ -2,7 +2,8 @@ var fs = require("fs");
 
 // 获取当前路径下的所有文件夹和文件的名称
 exports.getAllFiles = function(path, callback) {
-	path = "./uploads" + path + "/";
+	path = "./uploads/" + path + "/";
+	console.log("当前打开目录 :" + path);
 	fs.exists(path, function(exists) {
 		// 如果文件存在
 		if (exists) {
@@ -22,7 +23,6 @@ exports.getAllFiles = function(path, callback) {
 						return;
 					}
 					fs.stat(path + files[i], function(err, stats) {
-						console.log(path + files[i]);
 						if (err) {
 							callback(err, null);
 						}
@@ -56,6 +56,7 @@ exports.mkdir = function(basePath, newFolderName, callback) {
 			callback(err, null);
 			return;
 		}
+		console.log("新建文件夹 :" + path);
 		callback(null, "创建成功");
 	});
 }
