@@ -4,11 +4,22 @@ import java.io.File;
 
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class GitHelper {
+
+	private static final String USER;
+	private static final String PWD;
+	private static final UsernamePasswordCredentialsProvider credential;
+	
+	static {
+		USER = "wangzijoe@qq.com";
+		PWD = "wangzijoe,6597";
+		credential = new UsernamePasswordCredentialsProvider(USER, PWD);
+	}
 
 	/**
 	 * 克隆仓库
@@ -21,7 +32,7 @@ public class GitHelper {
 	private static boolean cloneRepository(String uri, String directory) {
 		try {
 			CloneCommand cloneCommand = Git.cloneRepository().setURI(uri);
-			cloneCommand.setDirectory(new File(directory)).call();
+			cloneCommand.setDirectory(new File(directory)).setCredentialsProvider(credential).call();
 			return true;
 		} catch (Exception e) {
 			log.debug(e.getMessage());
@@ -40,7 +51,7 @@ public class GitHelper {
 	private static boolean pull(String remoteBranchName, String dir) {
 		try {
 			Git git = Git.open(new File(dir));
-			git.pull().setRemoteBranchName(remoteBranchName).call();
+			git.pull().setCredentialsProvider(credential).setRemoteBranchName(remoteBranchName).call();
 			return true;
 		} catch (Exception e) {
 			log.debug(e.getMessage());
@@ -77,7 +88,8 @@ public class GitHelper {
 	private static boolean push(String dir) {
 		try {
 			Git git = Git.open(new File(dir));
-			git.push().call();
+
+			git.push().setCredentialsProvider(credential).call();
 			return true;
 		} catch (Exception e) {
 			log.debug(e.getMessage());
@@ -86,9 +98,6 @@ public class GitHelper {
 	}
 
 	public static void main(String[] args) {
-		String uri = "https://github.com/wangzijoe/Japanese.git";
-		String directory = "D://cache/jap";
-		cloneRepository(uri, directory);
-		pull("master", directory);
+
 	}
 }
