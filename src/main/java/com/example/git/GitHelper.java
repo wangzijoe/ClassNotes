@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import org.eclipse.jgit.api.AddCommand;
@@ -43,21 +44,28 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("unused")
 public class GitHelper {
 
-	private static final String USER;
-	private static final String PWD;
-	private static final UsernamePasswordCredentialsProvider credential;
+	private static String USER;
+	private static String PWD;
+	private static UsernamePasswordCredentialsProvider credential;
 
-	static {
-		USER = "wangzijoe@qq.com";
-		PWD = "wangzijoe,6597";
+	private static void signIn() {
+		Scanner scanner = new Scanner(System.in);
+		System.err.println("username:");
+		USER = scanner.nextLine();
+		System.err.println("password:");
+		PWD = scanner.nextLine();
+		scanner.close();
 		credential = new UsernamePasswordCredentialsProvider(USER, PWD);
 	}
 
 	public static void main(String[] args) {
+//		signIn();
 //		cloneRepository("https://gitee.com/njnode/WorkNotes.git", "D://cache/WorkNotes");
-//		commitRepository("D://cache/WorkNotes", "新建文本文档.txt", "2020-03-29");
+//		getChangedFiles("D://cache/WorkNotes");
+//		commitRepository("D://cache/WorkNotes", "新建文本文档.txt,新建文本文档 (2).txt", "2020-03-29");
 //		pushRepository("D://cache/WorkNotes");
 //		log("D://cache/WorkNotes");
+
 	}
 
 	public static String cloneRepository(String url, String localPath) {
@@ -71,7 +79,7 @@ public class GitHelper {
 			return e.getMessage();
 		}
 	}
-	
+
 	public static String commitRepository(String localPath, String fileNames, String message) {
 		try {
 			Git git = Git.open(new File(localPath));
@@ -81,7 +89,7 @@ public class GitHelper {
 				addCommand.addFilepattern(file);
 			}
 			addCommand.call();
-			
+
 			CommitCommand commitCommand = git.commit();
 			commitCommand.setMessage(message);
 			commitCommand.call();
@@ -91,7 +99,7 @@ public class GitHelper {
 			return e.getMessage();
 		}
 	}
-	
+
 	public static String pushRepository(String localPath) {
 		try {
 			Git git = Git.open(new File(localPath));
@@ -99,7 +107,7 @@ public class GitHelper {
 			pushCommand.setCredentialsProvider(credential);
 			pushCommand.setForce(true);
 			Iterable<PushResult> iterable = pushCommand.call();
-			
+
 			for (PushResult pushResult : iterable) {
 				System.err.println(JSON.toJSONString(pushResult, true));
 			}
@@ -109,7 +117,7 @@ public class GitHelper {
 			return e.getMessage();
 		}
 	}
-	
+
 	public static void log(String localPath) {
 		try {
 			Git git = Git.open(new File(localPath));
@@ -123,12 +131,6 @@ public class GitHelper {
 
 		}
 	}
-	
-	
-
-	/******************************************************************************************/
-
-
 
 	public static void getChangedFiles(String localPath) {
 		try {
@@ -142,19 +144,12 @@ public class GitHelper {
 			result.put("changed", changedSet);
 			Set<String> missSet = status.getMissing();
 			result.put("missed", missSet);
-			System.err.println(result);
+			System.err.println(JSON.toJSONString(result, true));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * fetch
-	 * 
-	 * @param localPath
-	 * @param branch
-	 * @return
-	 */
 	public static String fetchBranch(String localPath) {
 		try {
 			Git git = Git.open(new File(localPath));
@@ -171,7 +166,7 @@ public class GitHelper {
 	 * 首先判断本地是否已有此分支
 	 * 
 	 * @param localPath 主仓
-	 * @return
+	 * @return 错误信息
 	 */
 	public static String switchBranch(String localPath, String branch) {
 		try {
@@ -179,7 +174,7 @@ public class GitHelper {
 			String newBranch = branch.substring(branch.lastIndexOf("/") + 1, branch.length());
 			CheckoutCommand checkoutCommand = git.checkout();
 			List<String> list = getLocalBranchNames(localPath);
-			if (!list.contains(newBranch)) {// 如果本地分支
+			if (!list.contains(newBranch)) {
 				checkoutCommand.setStartPoint(branch);
 				checkoutCommand.setCreateBranch(true);
 			}
@@ -190,124 +185,6 @@ public class GitHelper {
 			e.printStackTrace();
 			return e.getMessage();
 		}
-	}
-
-	/**
-	 * 切换子仓的分支
-	 * 
-	 * @param localPath 主仓
-	 * @param sub       子仓
-	 * @param branch    分支名
-	 * @return
-	 */
-	public static String switchSubhBranch(String localPath, String sub, String branch) {
-		try {
-			Git git = Git.open(new File(localPath + "\\.git\\modules" + sub));
-			String newBranch = branch.substring(branch.lastIndexOf("/") + 1, branch.length());
-			CheckoutCommand checkoutCommand = git.checkout();
-			List<String> list = getLocalBranchNames(localPath + "\\.git\\modules" + sub);
-			if (!list.contains(newBranch)) {// 如果本地分支
-				checkoutCommand.setStartPoint(branch);
-				checkoutCommand.setCreateBranch(true);
-				checkoutCommand.setForce(true);
-			}
-			checkoutCommand.setName(newBranch);
-			checkoutCommand.call();
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return e.getMessage();
-		}
-	}
-
-	/**
-	 * 拿到当前本地分支名
-	 * 
-	 * @param localPath 主仓
-	 * @return
-	 * @throws IOException
-	 */
-	public static String getCurrentBranch(String localPath) throws IOException {
-		Git git = Git.open(new File(localPath));
-		return git.getRepository().getBranch();
-	}
-
-	/**
-	 * 拿到当前远程分支名
-	 * 
-	 * @param localPath 主仓
-	 * @return
-	 * @throws IOException
-	 */
-	public static String getCurrentRemoteBranch(String localPath) throws IOException {
-		Git git = Git.open(new File(localPath));
-		StoredConfig storedConfig = git.getRepository().getConfig();
-		String currentRemote = storedConfig.getString("branch", getCurrentBranch(localPath), "remote");
-		return currentRemote;
-	}
-
-	/**
-	 * 获取所有远程
-	 * 
-	 * @param localPath 主仓
-	 * @return
-	 * @throws IOException
-	 * @throws GitAPIException
-	 */
-	public static List<String> getRemotes(String localPath) throws IOException, GitAPIException {
-		Git git = Git.open(new File(localPath));
-		RemoteListCommand remoteListCommand = git.remoteList();
-		List<RemoteConfig> list = remoteListCommand.call();
-		List<String> result = new LinkedList<String>();
-		for (RemoteConfig remoteConfig : list) {
-			result.add(remoteConfig.getName());
-		}
-		return result;
-	}
-
-	/**
-	 * 获取本地所有分支名
-	 * 
-	 * @param localPath
-	 * @return
-	 * @throws IOException
-	 */
-	public static List<String> getLocalBranchNames(String localPath) throws IOException {
-		List<String> result = new LinkedList<String>();
-		Git git = Git.open(new File(localPath));
-		Map<String, Ref> map = git.getRepository().getAllRefs();
-		Set<String> keys = map.keySet();
-		for (String str : keys) {
-			if (str.indexOf("refs/heads") > -1) {
-				String el = str.substring(str.lastIndexOf("/") + 1, str.length());
-				result.add(el);
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * 根据名称获取所有远程分支
-	 * 
-	 * @param localPath 主仓
-	 * @param name      远程名字
-	 * @return
-	 * @throws IOException
-	 */
-	public static List<String> getRemoteBranchNames(String localPath, String remote) throws IOException {
-		List<String> result = new LinkedList<String>();
-		Git git = Git.open(new File(localPath));
-		Map<String, Ref> map = git.getRepository().getAllRefs();
-		Set<String> keys = map.keySet();
-		String index = "refs/remotes/" + remote;
-		for (String str : keys) {
-			if (str.indexOf(index) > -1) {
-				// String el=str.substring(str.lastIndexOf("/")+1, str.length());
-				result.add(str);
-				System.err.println(str);
-			}
-		}
-		return result;
 	}
 
 	/**
@@ -359,144 +236,92 @@ public class GitHelper {
 	}
 
 	/**
-	 * push到远程仓库<br>
-	 * 
-	 * @param string
-	 * @param string2
-	 * @param string3
-	 * @return
-	 */
-
-
-	/**
-	 * 远程提交子仓
+	 * 拿到当前本地分支名
 	 * 
 	 * @param localPath 主仓
-	 * @param sub       子仓
-	 * @return
+	 * @return 当前本地分支名
+	 * @throws IOException
 	 */
-	public static String pushSubRepository(String localPath, String sub) {
-		try {
-			String newPath = localPath + "\\.git\\modules";
-			Git git = Git.open(new File(newPath + sub));
-			PushCommand pushCommand = git.push();
-			CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider("15862663403@163.com",
-					"yoyosd619");
-			pushCommand.setCredentialsProvider(credentialsProvider);
-			pushCommand.setForce(true).setPushAll();
-			Iterable<PushResult> iterable = pushCommand.call();
-			for (PushResult pushResult : iterable) {
-				System.err.println(pushResult.toString());
-			}
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return e.getMessage();
-		}
+	public static String getCurrentBranch(String localPath) throws IOException {
+		Git git = Git.open(new File(localPath));
+		return git.getRepository().getBranch();
 	}
 
 	/**
-	 * 提交本地代码
+	 * 拿到当前远程分支名
 	 * 
 	 * @param localPath 主仓
-	 * @param fileNames 文件名集合
-	 * @param message   备注
-	 * @return
+	 * @return 当前远程分支名
+	 * @throws IOException
 	 */
-
-
-	/**
-	 * @param localPath 主仓
-	 * @param sub       子仓
-	 * @param fileNames 文件名
-	 * @param message   消息
-	 * @return
-	 */
-	public static String commitSubRepository(String localPath, String sub, String fileNames, String message) {
-		try {
-			String newPath = localPath + "\\.git\\modules";
-			Git git = Git.open(new File(newPath + sub));
-
-			AddCommand addCommand = git.add();
-			String[] fileArr = fileNames.split(",");
-			for (String file : fileArr) {
-				addCommand.addFilepattern(file);
-			}
-			addCommand.call();
-			CommitCommand commitCommand = git.commit();
-			commitCommand.setMessage(message);
-			commitCommand.setAllowEmpty(true);
-			commitCommand.call();
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return e.getMessage();
-		}
+	public static String getCurrentRemoteBranch(String localPath) throws IOException {
+		Git git = Git.open(new File(localPath));
+		StoredConfig storedConfig = git.getRepository().getConfig();
+		String currentRemote = storedConfig.getString("branch", getCurrentBranch(localPath), "remote");
+		return currentRemote;
 	}
 
 	/**
-	 * 更新主仓
+	 * 获取所有远程
 	 * 
 	 * @param localPath 主仓
-	 * @return
+	 * @return 所有远程
+	 * @throws IOException
+	 * @throws GitAPIException
 	 */
-
-
-	/**
-	 * 更新子仓
-	 * 
-	 * @param sub       子仓名，多个时用，隔开
-	 * @param localPath 主仓
-	 * @return
-	 */
-	public static String pullSubRepository(String localPath, String sub) {
-		try {
-			String newPath = localPath + "\\.git\\modules";
-			String[] subArr = sub.split(",");
-			for (String path : subArr) {
-				Git git = Git.open(new File(newPath + path));
-				PullCommand pullCommand = git.pull();
-				pullCommand.call();
-			}
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return e.getMessage();
+	public static List<String> getRemotes(String localPath) throws IOException, GitAPIException {
+		Git git = Git.open(new File(localPath));
+		RemoteListCommand remoteListCommand = git.remoteList();
+		List<RemoteConfig> list = remoteListCommand.call();
+		List<String> result = new LinkedList<String>();
+		for (RemoteConfig remoteConfig : list) {
+			result.add(remoteConfig.getName());
 		}
+		return result;
 	}
 
 	/**
-	 * 下载子仓
+	 * 获取本地所有分支名
+	 * 
+	 * @param localPath
+	 * @return 本地所有分支名
+	 * @throws IOException
+	 */
+	public static List<String> getLocalBranchNames(String localPath) throws IOException {
+		List<String> result = new LinkedList<String>();
+		Git git = Git.open(new File(localPath));
+		Map<String, Ref> map = git.getRepository().getAllRefs();
+		Set<String> keys = map.keySet();
+		for (String str : keys) {
+			if (str.indexOf("refs/heads") > -1) {
+				String el = str.substring(str.lastIndexOf("/") + 1, str.length());
+				result.add(el);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 根据名称获取所有远程分支
 	 * 
 	 * @param localPath 主仓
-	 * @param sub       子仓
-	 * @return
+	 * @param name      远程名字
+	 * @return 所有远程分支
+	 * @throws IOException
 	 */
-	public static String cloneSubRepository(String localPath, String sub) {
-		try {
-			File zicang = new File(localPath + "\\.git\\modules\\" + sub);
-			if (zicang.exists()) {
-				deleteDir(zicang);
+	public static List<String> getRemoteBranchNames(String localPath, String remote) throws IOException {
+		List<String> result = new LinkedList<String>();
+		Git git = Git.open(new File(localPath));
+		Map<String, Ref> map = git.getRepository().getAllRefs();
+		Set<String> keys = map.keySet();
+		String index = "refs/remotes/" + remote;
+		for (String str : keys) {
+			if (str.indexOf(index) > -1) {
+				result.add(str);
+				System.err.println(str);
 			}
-			Git git = Git.open(new File(localPath));
-			System.err.println("开始下载子仓。。。");
-			SubmoduleInitCommand submoduleInit = git.submoduleInit();
-			SubmoduleUpdateCommand submoduleUpdate = git.submoduleUpdate();
-			String[] submoduleArr = sub.split(",");
-			for (String s : submoduleArr) {
-				System.err.println("准备下载子仓：" + s);
-				submoduleInit.addPath(s);
-				submoduleUpdate.addPath(s);
-			}
-			submoduleInit.call();
-			submoduleUpdate.call();
-			System.err.println("子仓下载完成。。。");
-			return "";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return e.getMessage();
 		}
-
+		return result;
 	}
 
 	private static boolean deleteDir(File dir) {
