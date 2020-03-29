@@ -1,14 +1,28 @@
 package com.example.git;
 
+import java.awt.Color;
+import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JPasswordField;
+import javax.swing.KeyStroke;
 
 import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CheckoutCommand;
@@ -19,19 +33,17 @@ import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.LsRemoteCommand;
-import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.RemoteListCommand;
+import org.eclipse.jgit.api.RmCommand;
+import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.StatusCommand;
-import org.eclipse.jgit.api.SubmoduleInitCommand;
-import org.eclipse.jgit.api.SubmoduleUpdateCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Ref.Storage;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -44,34 +56,94 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("unused")
 public class GitHelper {
 
+	private static String POINT_GIT = ".git";
+	private static String ADDED = "added";
+	private static String REMOVED = "removed";
+	private static String MISSING = "missing";
+	private static String MODIFIED = "modified";
+	private static String CHANGED = "changed";
+
 	private static String USER;
 	private static String PWD;
-	private static UsernamePasswordCredentialsProvider credential;
-
-	private static void signIn() {
-		Scanner scanner = new Scanner(System.in);
-		System.err.println("username:");
-		USER = scanner.nextLine();
-		System.err.println("password:");
-		PWD = scanner.nextLine();
-		scanner.close();
-		credential = new UsernamePasswordCredentialsProvider(USER, PWD);
-	}
+	private static String LOCAL_REPOSITORY = "D://cache/WorkNotes";
+	private static String REMOTE_REPOSITORY = "https://gitee.com/njnode/WorkNotes.git";
+	private static UsernamePasswordCredentialsProvider CREDENTIAL;
 
 	public static void main(String[] args) {
-//		signIn();
-//		cloneRepository("https://gitee.com/njnode/WorkNotes.git", "D://cache/WorkNotes");
-//		getChangedFiles("D://cache/WorkNotes");
-//		commitRepository("D://cache/WorkNotes", "新建文本文档.txt,新建文本文档 (2).txt", "2020-03-29");
-//		pushRepository("D://cache/WorkNotes");
-//		log("D://cache/WorkNotes");
-
+		signInAndPush();
 	}
 
-	public static String cloneRepository(String url, String localPath) {
+	private static void signInAndPush() {
+		JFrame frame = new JFrame();
+		frame.setBounds(100, 100, 667, 453);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+
+		Label usernameLabel = new Label("USER:");
+		usernameLabel.setAlignment(Label.CENTER);
+		usernameLabel.setBounds(116, 49, 50, 23);
+		frame.getContentPane().add(usernameLabel);
+
+		Label passwordLabel = new Label("PWD:");
+		passwordLabel.setAlignment(Label.CENTER);
+		passwordLabel.setBounds(116, 85, 50, 23);
+		frame.getContentPane().add(passwordLabel);
+
+		JButton button = new JButton("login");
+		button.setBackground(new Color(255, 255, 255));
+		button.setBounds(126, 121, 212, 23);
+		frame.getContentPane().add(button);
+
+		JFormattedTextField formattedTextField = new JFormattedTextField();
+		formattedTextField.setBounds(172, 49, 166, 23);
+		frame.getContentPane().add(formattedTextField);
+
+		JPasswordField passwordField = new JPasswordField();
+		passwordField.setBounds(172, 85, 166, 23);
+		frame.getContentPane().add(passwordField);
+
+		button.registerKeyboardAction(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					USER = formattedTextField.getText();
+					PWD = new String(passwordField.getPassword());
+					CREDENTIAL = new UsernamePasswordCredentialsProvider(USER, PWD);
+					commitAndPush(LOCAL_REPOSITORY, String.valueOf(System.currentTimeMillis()));
+				}catch(Exception exception){
+					exception.printStackTrace();
+				}finally {
+					frame.setVisible(false);
+					System.exit(0);
+				}
+			}
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+		button.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					USER = formattedTextField.getText();
+					PWD = new String(passwordField.getPassword());
+					CREDENTIAL = new UsernamePasswordCredentialsProvider(USER, PWD);
+					commitAndPush(LOCAL_REPOSITORY, String.valueOf(System.currentTimeMillis()));
+				}catch(Exception exception){
+					exception.printStackTrace();
+				}finally {
+					frame.setVisible(false);
+					System.exit(0);
+				}
+			}
+		});
+		frame.setVisible(true);
+	}
+
+	public static String clone(String url, String localPath) {
 		try {
 			CloneCommand cloneCommand = Git.cloneRepository().setURI(url);
-			cloneCommand.setCredentialsProvider(credential);
+			cloneCommand.setCredentialsProvider(CREDENTIAL);
 			cloneCommand.setDirectory(new File(localPath)).call();
 			return null;
 		} catch (Exception e) {
@@ -80,16 +152,35 @@ public class GitHelper {
 		}
 	}
 
-	public static String commitRepository(String localPath, String fileNames, String message) {
+	public static String add(String localPath, String filepattern) {
 		try {
 			Git git = Git.open(new File(localPath));
 			AddCommand addCommand = git.add();
-			String[] fileArr = fileNames.split(",");
-			for (String file : fileArr) {
-				addCommand.addFilepattern(file);
-			}
+			addCommand.addFilepattern(filepattern);
 			addCommand.call();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+	}
 
+	public static String rm(String localPath, String filepattern) {
+		try {
+			Git git = Git.open(new File(localPath));
+			RmCommand rmCommand = git.rm();
+			rmCommand.addFilepattern(filepattern);
+			rmCommand.call();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+	}
+
+	public static String commit(String localPath, String message) {
+		try {
+			Git git = Git.open(new File(localPath));
 			CommitCommand commitCommand = git.commit();
 			commitCommand.setMessage(message);
 			commitCommand.call();
@@ -100,11 +191,43 @@ public class GitHelper {
 		}
 	}
 
-	public static String pushRepository(String localPath) {
+	public static String commitAndPush(String localPath, String message) {
+		try {
+			if (!new File(LOCAL_REPOSITORY).exists()) {
+				clone(REMOTE_REPOSITORY, LOCAL_REPOSITORY);
+			}
+			List<String> fileTree = com.example.utils.FileUtils.getFileTree(LOCAL_REPOSITORY);
+			fileTree = fileTree.stream().map(f -> f.substring(LOCAL_REPOSITORY.length(), f.length()))
+					.filter(f -> !f.startsWith(POINT_GIT)).collect(Collectors.toList());
+			// 我新增的
+			fileTree.forEach(f -> add(LOCAL_REPOSITORY, f));
+			Map<String, Set<String>> changedFiles = getChangedFiles(LOCAL_REPOSITORY);
+			// 我直接删除的
+			Set<String> missingFilesSet = changedFiles.get(MISSING);
+			for (Iterator<String> iterator = missingFilesSet.iterator(); iterator.hasNext();) {
+				String fileName = iterator.next();
+				rm(LOCAL_REPOSITORY, fileName);
+			}
+			Set<String> changedFilesSet = changedFiles.get(CHANGED);
+			for (Iterator<String> iterator = changedFilesSet.iterator(); iterator.hasNext();) {
+				String fileName = iterator.next();
+				add(LOCAL_REPOSITORY, fileName);
+			}
+			commit(LOCAL_REPOSITORY, message);
+			push(LOCAL_REPOSITORY);
+
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+	}
+
+	public static String push(String localPath) {
 		try {
 			Git git = Git.open(new File(localPath));
 			PushCommand pushCommand = git.push();
-			pushCommand.setCredentialsProvider(credential);
+			pushCommand.setCredentialsProvider(CREDENTIAL);
 			pushCommand.setForce(true);
 			Iterable<PushResult> iterable = pushCommand.call();
 
@@ -132,22 +255,45 @@ public class GitHelper {
 		}
 	}
 
-	public static void getChangedFiles(String localPath) {
+	/**
+	 * <pre>
+	 * 记录上一次提交后做出的改变<br>
+	 * commit 以后，手动删除文件，会记录为 missing 状态<br>
+	 * commit 以后，修改文件，会记录为 modified 状态<br>
+	 * commit 以后，调用 git rm filename 会记录为 removed 状态<br>
+	 * </pre>
+	 * 
+	 * @param localPath
+	 * @return
+	 */
+	public static Map<String, Set<String>> getChangedFiles(String localPath) {
 		try {
+			Map<String, Set<String>> result = new HashMap<String, Set<String>>();
 			Git git = Git.open(new File(localPath));
 			StatusCommand statusCommand = git.status();
-			org.eclipse.jgit.api.Status status = statusCommand.call();
-			Map<String, Set<String>> result = new HashMap<String, Set<String>>();
-			Set<String> addedSet = status.getAdded();
-			result.put("added", addedSet);
-			Set<String> changedSet = status.getChanged();
-			result.put("changed", changedSet);
-			Set<String> missSet = status.getMissing();
-			result.put("missed", missSet);
+			Status status = statusCommand.call();
+
+			Set<String> added = status.getAdded();
+			result.put(ADDED, added);
+
+			Set<String> changed = status.getChanged();
+			result.put(CHANGED, changed);
+
+			Set<String> missing = status.getMissing();
+			result.put(MISSING, missing);
+
+			Set<String> removed = status.getRemoved();
+			result.put(REMOVED, removed);
+
+			Set<String> modified = status.getModified();
+			result.put(MODIFIED, modified);
+
 			System.err.println(JSON.toJSONString(result, true));
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	public static String fetchBranch(String localPath) {
