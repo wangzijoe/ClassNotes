@@ -7,7 +7,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -110,7 +112,8 @@ public class GitHelper {
 					USER = formattedTextField.getText();
 					PWD = new String(passwordField.getPassword());
 					CREDENTIAL = new UsernamePasswordCredentialsProvider(USER, PWD);
-					commitAndPush(LOCAL_REPOSITORY, String.valueOf(System.currentTimeMillis()));
+					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					commitAndPush(LOCAL_REPOSITORY, df.format(new Date()));
 				}catch(Exception exception){
 					exception.printStackTrace();
 				}finally {
@@ -128,7 +131,8 @@ public class GitHelper {
 					USER = formattedTextField.getText();
 					PWD = new String(passwordField.getPassword());
 					CREDENTIAL = new UsernamePasswordCredentialsProvider(USER, PWD);
-					commitAndPush(LOCAL_REPOSITORY, String.valueOf(System.currentTimeMillis()));
+					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					commitAndPush(LOCAL_REPOSITORY, df.format(new Date()));
 				}catch(Exception exception){
 					exception.printStackTrace();
 				}finally {

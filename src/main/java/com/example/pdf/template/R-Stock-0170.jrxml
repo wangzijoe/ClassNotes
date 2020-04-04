@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="R-Stock-0170" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a4b828de-a5de-4452-9602-2e195d553a62">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="sortType" class="java.lang.String"/>
+	<field name="printDate" class="java.lang.String"/>
+	<field name="printTime" class="java.lang.String"/>
+	<field name="searchConditionArea" class="java.lang.String"/>
+	<field name="blCdGroupCode" class="java.lang.Integer"/>
+	<field name="shelfNum" class="java.lang.String"/>
+	<field name="itemPartsNumber" class="java.lang.String"/>
+	<field name="itemName" class="java.lang.String"/>
+	<field name="stockTotal" class="java.math.BigDecimal"/>
+	<field name="costUnitPrice" class="java.math.BigDecimal"/>
+	<field name="supplierCd" class="java.math.BigDecimal"/>
+	<field name="blPartsCd" class="java.lang.Integer"/>
+	<field name="itemMakerCd" class="java.math.BigDecimal"/>
+	<field name="stocktakingSeqNo" class="java.math.BigDecimal"/>
+	<field name="whCode" class="java.lang.String"/>
+	<field name="whName" class="java.lang.String"/>
+	<field name="loanType" class="java.lang.String"/>
+	<field name="reportFooterPrintContentLeft" class="java.lang.String"/>
+	<field name="reportFooterPrintContentRight" class="java.lang.String"/>
+	<field name="whTotalStockTotal" class="java.math.BigDecimal"/>
+	<field name="totalStockTotal" class="java.math.BigDecimal"/>
+	<field name="stocktakingPageBreakDiv" class="java.lang.String"/>
+	<field name="stocktakingOutputOrderDiv" class="java.lang.String"/>
+	<field name="shelfNumBreakDiv" class="java.lang.String"/>
+	<field name="nothing" class="java.lang.String"/>
+	<field name="totalPrintDiv" class="java.lang.String"/>
+	<field name="stocktakingDataCreateSourceDiv" class="java.lang.String"/>
+	<variable name="whTotalTitle" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" calculation="Sum">
+		<variableExpression><![CDATA[$F{stockTotal}]]></variableExpression>
+	</variable>
+	<variable name="totalTitle" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{stockTotal}]]></variableExpression>
+	</variable>
+	<group name="Group3" keepTogether="true">
+		<groupExpression><![CDATA[$F{stocktakingDataCreateSourceDiv}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="Group1" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{stocktakingPageBreakDiv}.equals("1")?$F{whCode}:$F{nothing}]]></groupExpression>
+		<groupHeader>
+			<band height="42">
+				<textField isBlankWhenNull="true">
+					<reportElement x="34" y="31" width="186" height="11" uuid="cfed8e0c-f05b-41c8-b11f-0a54bd3b7795"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{whName}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="31" width="34" height="11" uuid="1e98ddb4-2998-4023-9d22-7540346199eb"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{whCode}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="18" width="60" height="11" isRemoveLineWhenBlank="true" uuid="f1b64750-c225-44a1-b953-4ef0d90df227"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{stocktakingDataCreateSourceDiv}.equals("1")?"<貸出分>":""]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="15" width="555" height="1" uuid="4fa4a70b-1f14-4d7c-aa2a-9b435bdfa6fb"/>
+				</line>
+				<staticText>
+					<reportElement x="178" y="3" width="29" height="11" uuid="6acde343-1c36-4795-a8a6-b00167014063"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[品名]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="3" width="30" height="11" uuid="e2e59fee-bf56-4cc2-bd44-9dd02be2d4e3"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ｸﾞﾙｰﾌﾟ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="418" y="3" width="32" height="11" uuid="14e08f02-481a-45c7-a8b8-fc8092801ca3"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[仕入先]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="288" y="3" width="26" height="11" uuid="a88bba29-a957-445f-b33e-ef5668feb796"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[帳簿数]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="493" y="3" width="19" height="11" uuid="33180808-b97c-4f03-8887-d3db169bfe61"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ﾒｰｶｰ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="84" y="3" width="19" height="11" uuid="8304953c-c90e-4201-9587-b9e42158a862"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[品番]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="465" y="3" width="25" height="11" uuid="e19493f7-b935-422a-8aa5-4125d2ea48c8"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[BLｺｰﾄﾞ]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="1" width="555" height="1" uuid="47ec6667-94ba-4316-b5da-9f918bb5a24a"/>
+				</line>
+				<staticText>
+					<reportElement x="514" y="3" width="41" height="11" uuid="bb257ddd-e5a3-47d5-812b-b8b72e01ad30"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[棚卸連番]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="333" y="3" width="26" height="11" uuid="33244b17-2dc7-4a6e-b354-19b38da6572a"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[棚卸数]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="34" y="3" width="20" height="11" uuid="38dca816-0552-4b3b-8754-9c679ab5e117"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[棚番]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="388" y="3" width="28" height="11" uuid="a21d7156-1179-48ff-b292-1eac73296acf"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[原単価]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="21">
+				<textField pattern="#,###,##0.00" isBlankWhenNull="true">
+					<reportElement x="252" y="8" width="62" height="13" uuid="1dcd9225-1f0f-463a-b64f-9cc347f83a92"/>
+					<textElement textAlignment="Right">
+						<font fontName="Consolas" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{whTotalStockTotal}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="316" y="8" width="43" height="13" uuid="98ca65fa-9f55-4acf-9d59-9e33194b0704"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font fontName="Consolas" size="8" isBold="false"/>
+					</textElement>
+					<text><![CDATA[(               )]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="178" y="8" width="39" height="13" uuid="8c814d78-1d8c-4a65-a2a0-4e6601e27350"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Consolas" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[倉庫計]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="5" width="555" height="1" uuid="703a5e68-8143-4d40-8537-575b32a2d9f5"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="Group2" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{stocktakingPageBreakDiv}.equals("2")?$F{stocktakingOutputOrderDiv}.equals("4")?$F{itemMakerCd}:$F{stocktakingOutputOrderDiv}.equals("3")?$F{blCdGroupCode}:$F{stocktakingOutputOrderDiv}.equals("2")?$F{blPartsCd}:$F{stocktakingOutputOrderDiv}.equals("1")||$F{stocktakingOutputOrderDiv}.equals("5")||$F{stocktakingOutputOrderDiv}.equals("6")?$F{supplierCd}:$F{stocktakingOutputOrderDiv}.equals("0")?$F{shelfNumBreakDiv}.isEmpty()?$F{shelfNum}:$F{shelfNumBreakDiv}:$F{nothing}:$F{nothing}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="8" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="515" y="2" width="22" height="15" uuid="18b1e96c-c113-4043-99f9-32729c3c1632"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="352" y="2" width="41" height="15" uuid="be041fed-f7de-4111-a97a-67468368db60"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[作成日付：]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="18" width="555" height="1" uuid="aeefe35c-e56e-4847-98da-f30178dd8b34"/>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="0" y="20" width="555" height="10" uuid="767d3fda-8efd-4497-996b-6325d15f6f6b"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{searchConditionArea}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="393" y="2" width="50" height="15" uuid="bd0351be-0843-46ef-8f01-e7234a971562"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{printDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm" isBlankWhenNull="true">
+				<reportElement x="445" y="2" width="28" height="15" uuid="a9073c73-8cb2-4af0-8267-c338f261f84e"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{printTime}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="16" y="1" width="114" height="16" uuid="ac98c55f-13b7-45ee-b706-71c02a56c1e8"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="14.25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[棚卸調査表]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="171" y="6" width="100" height="11" printWhenGroupChanges="Group2" uuid="8debdd9d-1b31-4020-bb5d-ab45a5788262"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["［"+$F{sortType}+"］"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="475" y="2" width="40" height="15" uuid="c66ed97b-3732-4048-8e04-7de6035e98ba"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[ページ：]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<textField pattern="#00000" isBlankWhenNull="true">
+				<reportElement x="0" y="8" width="34" height="11" uuid="43ad8202-f436-41f0-812e-161e1b8cf21b"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{blCdGroupCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="34" y="8" width="50" height="11" uuid="53383007-67da-4ee8-959c-02e02d8aea5b"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{shelfNum}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="84" y="8" width="94" height="11" uuid="faa2c7ce-b4ba-4e9b-b2db-50b19e05724f"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{itemPartsNumber}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="178" y="8" width="84" height="11" uuid="6e240baa-26ae-4dcf-8ea0-5048759ae45e"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{itemName}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###,##0.00" isBlankWhenNull="true">
+				<reportElement x="262" y="8" width="52" height="11" uuid="fe63a65a-f69e-463d-aea6-4e85f67dffb1"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stockTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##,###,##0.00" isBlankWhenNull="true">
+				<reportElement x="359" y="8" width="57" height="11" uuid="a045ab8f-1282-48bd-92f7-46e3c5bafb55"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{costUnitPrice}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#000000000" isBlankWhenNull="true">
+				<reportElement x="418" y="8" width="46" height="11" uuid="7a5a9dbe-3a84-4e31-8b7b-e7173f101dc7"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{supplierCd}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0000" isBlankWhenNull="true">
+				<reportElement x="493" y="8" width="21" height="11" uuid="580cb6dd-74df-4189-9587-5c17bcb5aea2"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{itemMakerCd}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#00000000" isBlankWhenNull="true">
+				<reportElement x="514" y="8" width="41" height="11" uuid="bf79d11d-0538-4dbe-a46a-4495ab22c3dd"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stocktakingSeqNo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#00000" isBlankWhenNull="true">
+				<reportElement x="465" y="8" width="28" height="11" uuid="c5ff876a-4208-40ac-844a-a30b18e490ee"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{blPartsCd}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="2" width="555" height="1" uuid="ea4746ef-1aad-4a8c-a023-3d30fdcfe247"/>
+			</line>
+			<staticText>
+				<reportElement x="316" y="8" width="43" height="11" uuid="47d30050-ccd8-433b-9e58-af8ab79c2a67"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[(               )]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="12" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="7daf38b2-7dac-4828-9a2e-1e2fda28486b"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="2" width="215" height="10" uuid="b0591a32-cbaf-48f3-9f58-792a0af72412"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reportFooterPrintContentLeft}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="340" y="2" width="215" height="10" uuid="a11e43d0-6880-417f-986c-4d97835d7869"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Consolas" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reportFooterPrintContentRight}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement x="178" y="5" width="37" height="13" uuid="adf38f43-360b-4fd4-8232-ace3b9ca4822">
+					<printWhenExpression><![CDATA[$F{totalPrintDiv}.equals("0")?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font fontName="Consolas" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[総合計]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="316" y="5" width="43" height="13" uuid="3fc9203e-8ce6-42d3-8b0c-22f50f821a28">
+					<printWhenExpression><![CDATA[$F{totalPrintDiv}.equals("0")?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Consolas" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[(               )]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="2" width="555" height="1" uuid="6499a0b3-b7eb-4af1-bc9b-246cc1f33e83"/>
+			</line>
+			<textField pattern="#,###,##0.00" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="252" y="5" width="62" height="13" uuid="43477ed9-c176-4c27-8995-03791bdc1acf">
+					<printWhenExpression><![CDATA[$F{totalPrintDiv}.equals("0")?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font fontName="Consolas" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalStockTotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

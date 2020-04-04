@@ -1,0 +1,25 @@
+[
+	{
+		"sortType": "棚番順",
+		"printDate": "2020/01/15",
+		"printTime": "12:21",
+		"searchConditionArea": "棚卸日：2019/12/24　出力指定：全て　在庫区分：全て　貸出分：印刷しない　組織コード：　倉庫コード：最初から ～ 最後まで　棚番：最初から ～ 最後まで　仕入先コード：最初から ～ 最後まで　BL部品コード：最初から ～ 最後まで　BLコードグループコード：最初から ～ 最後まで　メーカーコード：最初から ～ 最後まで\r\n棚卸通番：最初から ～ 最後まで",
+		"whCode": "000001",
+		"whName": "倉庫103",
+		"blCdGroupCode": 0,
+		"shelfNum": "1",
+		"itemPartsNumber": "1000",
+		"itemName": "",
+		"stockTotal": 234.00,
+		"costUnitPrice": 0,
+		"supplierCd": 0,
+		"blPartsCd": 0,
+		"itemMakerCd": 1,
+		"stocktakingSeqNo": 88888888,
+		"reportFooterPrintContentLeft": null,
+		"reportFooterPrintContentRight": null,
+		"shelfNumBreakDiv": "1桁",
+		"shelfNumBreakValue": "1",
+		"stocktakingDataCreateSourceDiv": "0"
+	}
+]

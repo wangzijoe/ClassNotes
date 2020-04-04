@@ -1,0 +1,32 @@
+[
+	{
+		"studentName":"李元芳",
+		"subject":"语文",
+		"mark":90
+	},
+	{
+		"studentName":"李元芳",
+		"subject":"数学",
+		"mark":91
+	},
+	{
+		"studentName":"李元芳",
+		"subject":"英语",
+		"mark":92
+	},
+	{
+		"studentName":"狄仁杰",
+		"subject":"语文",
+		"mark":60
+	},
+	{
+		"studentName":"狄仁杰",
+		"subject":"数学",
+		"mark":61
+	},
+	{
+		"studentName":"狄仁杰",
+		"subject":"英语",
+		"mark":62
+	}
+]
