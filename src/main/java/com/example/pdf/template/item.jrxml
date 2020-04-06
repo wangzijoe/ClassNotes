@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+	name="item" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" 
+	leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="40f32e9e-f6d7-4378-b802-8f04f84e7d04">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="id" class="java.lang.Long">
+		<fieldDescription><![CDATA[商品id，同时也是商品编号]]></fieldDescription>
+	</field>
+	<field name="title" class="java.lang.String">
+		<fieldDescription><![CDATA[商品标题]]></fieldDescription>
+	</field>
+
+	<field name="price" class="java.lang.Long">
+		<fieldDescription><![CDATA[商品价格，单位为：分]]></fieldDescription>
+	</field>
+
+	<field name="image" class="java.lang.String">
+		<fieldDescription><![CDATA[商品图片]]></fieldDescription>
+	</field>
+
+
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="38" width="199" height="41" uuid="c35c207e-0094-405b-b170-35a8dac81d32"/>
+				<textElement>
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[商品信息]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="143" height="20" uuid="8ef2b921-eb06-494a-96b0-ce7c1a8255dd"/>
+				<text><![CDATA[商品id，同时也是商品编号]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="2" width="100" height="20" uuid="2b18d770-d3cb-4180-a6d8-48da19cc127e"/>
+				<text><![CDATA[商品价格，单位为：分]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="2" width="100" height="20" uuid="af010349-31b7-44e0-a7cf-e21c1a1843e7"/>
+				<text><![CDATA[商品标题]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="692" y="0" width="100" height="20" uuid="93695f9d-67f4-4eca-a326-e341bd2dc875"/>
+				<text><![CDATA[商品图片]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="18" width="802" height="1" uuid="51b411f9-25d5-4e9d-8722-02fe19988cdb"/>
+			</line>
+			<staticText>
+				<reportElement x="416" y="2" width="100" height="20" uuid="2f0e577e-f0c1-43f2-a882-d6be393d5daf"/>
+				<text><![CDATA[价格是否贵了]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="143" height="20" uuid="3eed08ed-d93d-4f58-8e91-c8b2cb822714"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="292" y="0" width="100" height="20" uuid="cad68ef7-130b-453d-a658-36c55e2007c0"/>
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="3" width="100" height="20" uuid="37720810-08f8-44fb-8f31-67802b1c98b9"/>
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="692" y="0" width="110" height="20" uuid="faca614b-c747-42fd-9678-086dfeb8fb42"/>
+				<textFieldExpression><![CDATA[$F{image}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="416" y="0" width="100" height="20" uuid="fa24f286-aef8-4087-960c-51ee6c9ccb98"/>
+				<textFieldExpression><![CDATA[$F{price} > 12000 ? true : false ]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

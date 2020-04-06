@@ -96,6 +96,23 @@
 			<artifactId>jasperreports</artifactId>
 			<version>6.4.0</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.clojure/java.jdbc -->
+		<dependency>
+			<groupId>org.clojure</groupId>
+			<artifactId>java.jdbc</artifactId>
+			<version>0.7.11</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+
+
+
 	</dependencies>
 
 	<build>

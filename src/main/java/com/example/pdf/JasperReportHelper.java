@@ -31,6 +31,12 @@ import net.sf.jasperreports.engine.data.JsonDataSource;
 @RequestMapping("/jasperreports/")
 public class JasperReportHelper {
 
+	/*
+	 * http://localhost/jasperreports/print/item.jrxml/item.json
+	 * http://localhost/jasperreports/print/R-Stock-0170.jrxml/pmRate.json
+	 * http://localhost/jasperreports/print/R-Bizcmn-0010.jrxml/stock.json
+	 */
+
 	private static final String DATA_DIR = File.separator + "data";
 	private static final String TEMPLATE_DIR = File.separator + "template";
 	private static final String SRC_MAIN_JAVA = File.separator + "src" + File.separator + "main" + File.separator
@@ -60,8 +66,8 @@ public class JasperReportHelper {
 					(prev, line) -> prev + line + System.getProperty("line.separator"));
 			byteArrayDataInput = new ByteArrayInputStream(realPdfTemplate.getBytes("UTF-8"));
 			JasperReport report = JasperCompileManager.compileReport(byteArrayDataInput);
-			
-			Map<String,Object> parameters = new HashMap<String, Object>(16);
+
+			Map<String, Object> parameters = new HashMap<String, Object>(16);
 			JasperPrint fillReport = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
 			JasperExportManager.exportReportToPdfStream(fillReport, response.getOutputStream());
 		} catch (Exception e) {
