@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,9 +33,9 @@ import net.sf.jasperreports.engine.data.JsonDataSource;
 public class JasperReportHelper {
 
 	/*
-	 * http://localhost/jasperreports/print/item.jrxml/item.json
-	 * http://localhost/jasperreports/print/R-Stock-0170.jrxml/pmRate.json
-	 * http://localhost/jasperreports/print/R-Bizcmn-0010.jrxml/stock.json
+	 * http://localhost/jasperreports/print/item/item
+	 * http://localhost/jasperreports/print/R-Stock-0170/pmRate
+	 * http://localhost/jasperreports/print/R-Bizcmn-0010/stock
 	 */
 
 	private static final String DATA_DIR = File.separator + "data";
@@ -42,39 +43,46 @@ public class JasperReportHelper {
 	private static final String SRC_MAIN_JAVA = File.separator + "src" + File.separator + "main" + File.separator
 			+ "java";
 
+	private static String SUFFIX_JRXML = ".jrxml";
+	private static String SUFFIX_JSON = ".json";
+
 	@ResponseBody
 	@RequestMapping(value = "print/{pdfTemplate}/{pdfJson}", method = RequestMethod.GET)
 	public void printPDF(HttpServletResponse response, @PathVariable("pdfTemplate") String pdfTemplate,
 			@PathVariable("pdfJson") String pdfJson) {
 
-		System.err.println("pdfTemplate: " + pdfTemplate);
-		System.err.println("pdfJson: " + pdfJson);
+		pdfTemplate += SUFFIX_JRXML;
+		pdfJson += SUFFIX_JSON;
 		response.setContentType(MediaType.APPLICATION_PDF_VALUE);
 
 		String pdfJsonPath = this.getSrcFile() + DATA_DIR + File.separator + pdfJson;
 		String pdfTemplatePath = this.getSrcFile() + TEMPLATE_DIR + File.separator + pdfTemplate;
 		File pdfJsonFile = new File(pdfJsonPath);
 		File pdfTemplateFile = new File(pdfTemplatePath);
-		InputStream byteArrayDataInput = null;
+		InputStream dataSourceInput = null;
+		InputStream templateInput = null;
 		try {
 			String realPdfJson = Files.lines(pdfJsonFile.toPath(), StandardCharsets.UTF_8).reduce("",
 					(prev, line) -> prev + line + System.getProperty("line.separator"));
-			byteArrayDataInput = new ByteArrayInputStream(realPdfJson.getBytes("UTF-8"));
-			JsonDataSource dataSource = new JsonDataSource(byteArrayDataInput);
-
+			dataSourceInput = new ByteArrayInputStream(realPdfJson.getBytes(StandardCharsets.UTF_8));
+			JsonDataSource dataSource = new JsonDataSource(dataSourceInput);
+			
 			String realPdfTemplate = Files.lines(pdfTemplateFile.toPath(), StandardCharsets.UTF_8).reduce("",
 					(prev, line) -> prev + line + System.getProperty("line.separator"));
-			byteArrayDataInput = new ByteArrayInputStream(realPdfTemplate.getBytes("UTF-8"));
-			JasperReport report = JasperCompileManager.compileReport(byteArrayDataInput);
+			templateInput = new ByteArrayInputStream(realPdfTemplate.getBytes(StandardCharsets.UTF_8));
+			JasperReport report = JasperCompileManager.compileReport(templateInput);
 
 			Map<String, Object> parameters = new HashMap<String, Object>(16);
-			JasperPrint fillReport = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
+			JasperPrint fillReport = JasperFillManager.fillReport(report, parameters, dataSource);
 			JasperExportManager.exportReportToPdfStream(fillReport, response.getOutputStream());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				byteArrayDataInput.close();
+				if (Objects.nonNull(dataSourceInput))
+					dataSourceInput.close();
+				if (Objects.nonNull(templateInput))
+					templateInput.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -28,7 +28,7 @@ public class JdbcHelper {
 		}
 	}
 
-	public Connection getConnection() {
+	private Connection getConnection() {
 		Connection con = null;
 		this.registerDriver(info.getDriverName());
 		try {

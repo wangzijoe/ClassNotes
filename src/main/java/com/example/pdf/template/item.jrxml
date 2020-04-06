@@ -7,16 +7,16 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
-		<![CDATA[]]>
+		<![CDATA[select * from item]]>
 	</queryString>
-	<field name="id" class="java.lang.Long">
+	<field name="id" class="java.lang.String">
 		<fieldDescription><![CDATA[商品id，同时也是商品编号]]></fieldDescription>
 	</field>
 	<field name="title" class="java.lang.String">
 		<fieldDescription><![CDATA[商品标题]]></fieldDescription>
 	</field>
 
-	<field name="price" class="java.lang.Long">
+	<field name="price" class="java.lang.String">
 		<fieldDescription><![CDATA[商品价格，单位为：分]]></fieldDescription>
 	</field>
 
@@ -63,10 +63,7 @@
 			<line>
 				<reportElement x="0" y="18" width="802" height="1" uuid="51b411f9-25d5-4e9d-8722-02fe19988cdb"/>
 			</line>
-			<staticText>
-				<reportElement x="416" y="2" width="100" height="20" uuid="2f0e577e-f0c1-43f2-a882-d6be393d5daf"/>
-				<text><![CDATA[价格是否贵了]]></text>
-			</staticText>
+
 		</band>
 	</columnHeader>
 	<detail>
@@ -86,10 +83,6 @@
 			<textField>
 				<reportElement x="692" y="0" width="110" height="20" uuid="faca614b-c747-42fd-9678-086dfeb8fb42"/>
 				<textFieldExpression><![CDATA[$F{image}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="416" y="0" width="100" height="20" uuid="fa24f286-aef8-4087-960c-51ee6c9ccb98"/>
-				<textFieldExpression><![CDATA[$F{price} > 12000 ? true : false ]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
