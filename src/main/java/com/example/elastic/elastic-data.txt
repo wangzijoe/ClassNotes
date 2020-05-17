@@ -1,0 +1,99 @@
+GET _search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+
+
+POST test_search_index/doc/_bulk
+{"index":{"_id":"1"}}
+{"username":"alfred way","job":"java engineer","age":18,"birth":"1990-01-02","isMarried":false}
+{"index":{"_id":"2"}}
+{"username":"alfred","job":"java senior engineer and java specialist","age":28,"birth":"1980-05-07","isMarried":true}
+{"index":{"_id":"3"}}
+{"username":"lee","job":"java and ruby engineer","age":22,"birth":"1985-08-07","isMarried":false}
+{"index":{"_id":"4"}}
+{"username":"alfred junior way","job":"ruby engineer","age":23,"birth":"1989-08-07","isMarried":false}
+
+GET test_search_index/_search?q=alfred
+
+GET test_search_index/_search?q=alfred
+{
+	"profile":true
+}
+
+GET test_search_index/_search?q=username:alfred
+
+
+GET test_search_index/_search?q=username:"alfred way"
+{
+	"profile":true
+}
+
+GET test_search_index/_search?q=username:(alfred AND way)
+{
+	"profile":true
+}
+
+GET test_search_index/_search?q=username:(alfred +way)
+{
+	"profile":true
+}
+
+GET test_search_index/_search?q=username:(alfred %2Bway)
+{
+	"profile":true
+}
+
+GET test_search_index/_search?q=username:(alfred NOT way)
+{
+	"profile":true
+}
+
+GET test_search_index/_search?q=username:alfred age:>=26
+{
+	"profile":true
+}
+
+GET test_search_index/_search?q=username:alfred AND age:>=20
+{
+	"profile":true
+}
+
+GET test_search_index/_search
+{
+  "profile":true,
+  "query":{
+    "match": {
+      "username": "alfred way"
+    }
+  }
+}
+
+GET test_search_index/_search
+{
+  "profile":true,
+  "query":{
+    "match": {
+      "username": {
+        "query": "alfred way",
+        "operator": "and"
+      }
+    }
+  }
+}
+
+GET test_search_index/_search
+{
+  "profile":true,
+  "query":{
+    "match": {
+      "job": {
+        "query": "java ruby engineer",
+        "minimum_should_match": 3
+      }
+    }
+  }
+}
